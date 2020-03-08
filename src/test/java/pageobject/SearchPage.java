@@ -1,14 +1,38 @@
 package pageobject;
 
-import java.util.List;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import common.Car;
+import common.Sorting;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import static com.codeborne.selenide.Selenide.$;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static com.codeborne.selenide.Selenide.*;
+import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 
 public class SearchPage {
+
+    private static final Logger log = LogManager.getLogger(SearchPage.class);
+
+    private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
+            .appendPattern("MM/yyyy")
+            .parseDefaulting(DAY_OF_MONTH, 1)
+            .toFormatter();
 
     public SearchPage filterYear(String value) {
         $("[data-qa-selector=\"filter-year\"]").click();
         $("[name=\"yearRange.min\"]").selectOption(value);
+        $("[data-qa-selector=\"active-filter\"]").shouldBe(Condition.visible);
         return this;
     }
 
@@ -33,20 +57,26 @@ public class SearchPage {
                 $("[name=\"sort\"]").selectOption(6);
                 break;
         }
+        refresh();
         return this;
     }
 
-    public List<Car> getResults() {
-
-        return List.of();
+    public List<Car> getSearchResults() {
+        ElementsCollection specificationElements = $$("[data-qa-selector=\"results-found\"] [data-qa-selector=\"ad\"]");
+        return specificationElements.stream()
+                .map(toCar())
+                .peek(log::debug)
+                .collect(Collectors.toList());
     }
 
-    public enum Sorting {
-        PRICE_ASCENDING,
-        PRICE_DESCENDING,
-        MILEAGE_ASCENDING,
-        MILEAGE_DESCENDING,
-        MANUFACTURER_ASCENDING,
-        MANUFACTURER_DESCENDING
+    private Function<SelenideElement, Car> toCar() {
+        return specification -> {
+            String priceText = specification.$("[data-qa-selector=\"price\"]").getText();
+            String firstRegistrationText = specification.$("[data-qa-selector=\"spec\"]", 0).getText();
+            return Car.builder()
+                    .price(new BigDecimal(StringUtils.getDigits(priceText)))
+                    .firstRegistration(LocalDate.parse(firstRegistrationText.replaceAll("[^\\d/]", StringUtils.EMPTY), dateTimeFormatter))
+                    .build();
+        };
     }
 }

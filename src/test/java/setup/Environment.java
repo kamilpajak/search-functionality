@@ -1,7 +1,8 @@
 package setup;
 
 public enum Environment {
-    PRODUCTION("https://www.autohero.com/de/");
+
+    PRODUCTION("https://www.autohero.com/");
 
     private final String url;
 

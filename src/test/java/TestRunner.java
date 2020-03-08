@@ -1,19 +1,39 @@
+import common.Car;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pageobject.LandingPage;
 import pageobject.SearchPage;
 
-import static pageobject.SearchPage.Sorting.PRICE_DESCENDING;
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static common.Sorting.PRICE_DESCENDING;
 
 public class TestRunner {
 
+    private LandingPage landingPage = new LandingPage();
+
     @Test
-    @DisplayName("To be renamed")
-        // TODO: Change description
-    void toBeRenamed() { // TODO: Change test name
-        LandingPage landingPage = new LandingPage();
+    @DisplayName("User displays cars with first registration from a specific year, sorted by price descending")
+    void userDisplaysCarsWithFirstRegistrationFromSpecificYearSortedByPriceDescending() {
         SearchPage searchPage = landingPage.goToSearch();
-        searchPage.filterYear("2015").sortResults(PRICE_DESCENDING)
-                .getResults();
+
+        final int firstRegistrationFrom = 2015;
+        List<Car> searchResults = searchPage
+                .filterYear(Integer.toString(firstRegistrationFrom))
+                .sortResults(PRICE_DESCENDING)
+                .getSearchResults();
+
+        searchResults.stream()
+                .map(Car::firstRegistration)
+                .forEach(firstRegistration -> Assertions.assertTrue(firstRegistration.getYear() >= firstRegistrationFrom));
+
+        List<BigDecimal> returnedPrices = searchResults.stream()
+                .map(Car::price)
+                .collect(Collectors.toList());
+        Assertions.assertEquals(returnedPrices.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()), returnedPrices);
     }
 }

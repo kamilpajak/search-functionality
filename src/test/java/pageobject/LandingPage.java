@@ -5,14 +5,13 @@ import setup.Settings;
 
 import static com.codeborne.selenide.Selenide.*;
 import static org.apache.commons.lang3.EnumUtils.getEnumIgnoreCase;
-import static setup.Settings.setUp;
 
 public class LandingPage {
 
     public LandingPage() {
-        setUp();
-        Environment environment = getEnumIgnoreCase(Environment.class, Settings.properties.getProperty("environment"));
-        open(environment.url());
+        Settings.setUp();
+        Environment environment = getEnumIgnoreCase(Environment.class, Settings.properties.getProperty("autohero.environment"));
+        open(String.format("%s%s/", environment.url(), Settings.properties.getProperty("autohero.language")));
     }
 
     public SearchPage goToSearch() {
