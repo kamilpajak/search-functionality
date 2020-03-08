@@ -1,4 +1,4 @@
-import common.Car;
+import common.Vehicle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,17 +22,17 @@ public class TestRunner {
         SearchPage searchPage = landingPage.goToSearch();
 
         final int firstRegistrationFrom = 2015;
-        List<Car> searchResults = searchPage
+        List<Vehicle> searchResults = searchPage
                 .filterYear(Integer.toString(firstRegistrationFrom))
                 .sortResults(PRICE_DESCENDING)
                 .getSearchResults();
 
         searchResults.stream()
-                .map(Car::firstRegistration)
+                .map(Vehicle::firstRegistration)
                 .forEach(firstRegistration -> Assertions.assertTrue(firstRegistration.getYear() >= firstRegistrationFrom));
 
         List<BigDecimal> returnedPrices = searchResults.stream()
-                .map(Car::price)
+                .map(Vehicle::price)
                 .collect(Collectors.toList());
         Assertions.assertEquals(returnedPrices.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()), returnedPrices);
     }

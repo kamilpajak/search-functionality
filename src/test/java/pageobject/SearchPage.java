@@ -3,8 +3,8 @@ package pageobject;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import common.Car;
 import common.Sorting;
+import common.Vehicle;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,19 +61,19 @@ public class SearchPage {
         return this;
     }
 
-    public List<Car> getSearchResults() {
+    public List<Vehicle> getSearchResults() {
         ElementsCollection specificationElements = $$("[data-qa-selector=\"results-found\"] [data-qa-selector=\"ad\"]");
         return specificationElements.stream()
-                .map(toCar())
+                .map(toVehicle())
                 .peek(log::debug)
                 .collect(Collectors.toList());
     }
 
-    private Function<SelenideElement, Car> toCar() {
+    private Function<SelenideElement, Vehicle> toVehicle() {
         return specification -> {
             String priceText = specification.$("[data-qa-selector=\"price\"]").getText();
             String firstRegistrationText = specification.$("[data-qa-selector=\"spec\"]", 0).getText();
-            return Car.builder()
+            return Vehicle.builder()
                     .price(new BigDecimal(StringUtils.getDigits(priceText)))
                     .firstRegistration(LocalDate.parse(firstRegistrationText.replaceAll("[^\\d/]", StringUtils.EMPTY), dateTimeFormatter))
                     .build();
