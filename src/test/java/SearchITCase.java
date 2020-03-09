@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static common.Sorting.PRICE_DESCENDING;
 
-public class TestRunner {
+public class SearchITCase {
 
     private LandingPage landingPage = new LandingPage();
 
