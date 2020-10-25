@@ -29,11 +29,11 @@ class SearchITCase {
                 .getSearchResults();
 
         searchResults.stream()
-                .map(Vehicle::firstRegistration)
+                .map(Vehicle::getFirstRegistration)
                 .forEach(firstRegistration -> assertTrue(firstRegistration.getYear() >= firstRegistrationFrom));
 
         List<BigDecimal> returnedPrices = searchResults.stream()
-                .map(Vehicle::price)
+                .map(Vehicle::getPrice)
                 .collect(Collectors.toList());
         assertEquals(returnedPrices.stream()
                         .sorted(Comparator.reverseOrder())

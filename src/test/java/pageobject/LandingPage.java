@@ -1,11 +1,13 @@
 package pageobject;
 
+import lombok.extern.log4j.Log4j2;
 import setup.Environment;
 import setup.Settings;
 
 import static com.codeborne.selenide.Selenide.*;
 import static org.apache.commons.lang3.EnumUtils.getEnumIgnoreCase;
 
+@Log4j2
 public class LandingPage {
 
     public LandingPage() {

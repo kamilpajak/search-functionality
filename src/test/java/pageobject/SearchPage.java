@@ -5,9 +5,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import common.Sorting;
 import common.Vehicle;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,9 +19,8 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Selenide.*;
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 
+@Log4j2
 public class SearchPage {
-
-    private static final Logger log = LogManager.getLogger(SearchPage.class);
 
     private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
             .appendPattern("MM/yyyy")
