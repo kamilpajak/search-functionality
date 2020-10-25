@@ -1,5 +1,4 @@
 import common.Vehicle;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pageobject.LandingPage;
@@ -11,10 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static common.Sorting.PRICE_DESCENDING;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SearchITCase {
+class SearchITCase {
 
-    private LandingPage landingPage = new LandingPage();
+    private final LandingPage landingPage = new LandingPage();
 
     @Test
     @DisplayName("User displays cars with first registration from a specific year, sorted by price descending")
@@ -29,11 +30,14 @@ public class SearchITCase {
 
         searchResults.stream()
                 .map(Vehicle::firstRegistration)
-                .forEach(firstRegistration -> Assertions.assertTrue(firstRegistration.getYear() >= firstRegistrationFrom));
+                .forEach(firstRegistration -> assertTrue(firstRegistration.getYear() >= firstRegistrationFrom));
 
         List<BigDecimal> returnedPrices = searchResults.stream()
                 .map(Vehicle::price)
                 .collect(Collectors.toList());
-        Assertions.assertEquals(returnedPrices.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()), returnedPrices);
+        assertEquals(returnedPrices.stream()
+                        .sorted(Comparator.reverseOrder())
+                        .collect(Collectors.toList()),
+                returnedPrices);
     }
 }

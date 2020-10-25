@@ -12,10 +12,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <junit.version>5.6.0</junit.version>
-        <selenide.version>5.8.0</selenide.version>
-        <log4j.version>2.13.1</log4j.version>
-        <auto-value.version>1.7</auto-value.version>
+        <junit.version>5.7.0</junit.version>
+        <selenide.version>5.15.1</selenide.version>
+        <log4j.version>2.13.3</log4j.version>
+        <auto-value.version>1.7.4</auto-value.version>
     </properties>
 
     <dependencies>
